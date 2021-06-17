@@ -60,7 +60,7 @@ const (
 	frame_skeleton_Num   = 4
 
 	// Constants used to show background image
-	frameWidth_city  = 2043
+	frameWidth_city  = 4086
 	frameHeight_city = 790
 
 	// Constants used to show and animate logo image
@@ -172,7 +172,7 @@ func init() {
 	}
 }
 
-// A function that resets game progress
+// A function that resets game data
 func (g *Game) reset() {
 	g.key_pressed = KeyNone
 	g.game_status = ModeMenu
@@ -242,6 +242,8 @@ func (g *Game) Update() error {
 			g.game_status = ModeGameOV
 			g.key_pressed = KeyNone
 		}
+
+		// Updating score and game speed
 		if g.timer%60 == 0 {
 			g.score++
 			if g.score == 35 {
@@ -251,6 +253,7 @@ func (g *Game) Update() error {
 				g.enemy_speed++
 			}
 		}
+
 		if g.key_pressed == KeyEscape {
 			g.reset()
 		}
@@ -259,6 +262,7 @@ func (g *Game) Update() error {
 			g.Jump()
 		}
 
+		// Updating enemies speed and position
 		for i := 0; i < 4; i++ {
 			g.enemies[i].X -= 2 * g.enemy_speed
 			if g.enemies[i].X <= 0 {
@@ -266,6 +270,7 @@ func (g *Game) Update() error {
 			}
 		}
 
+		// Updating background animation
 		g.city_background.X -= 1
 		if g.city_background.X == -682 {
 			g.city_background.X = 0
@@ -283,6 +288,7 @@ func (g *Game) Update() error {
 
 	g.timer++
 
+	// Getting key value from keyboard
 	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 		g.key_pressed = KeySpace
 	} else if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
@@ -311,6 +317,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	} else if g.game_status == ModeGame {
 
+		// Drawing keybinds hints
 		text.Draw(screen, fmt.Sprintf("Escape: RESTART        Space: JUMP "), game_font_small, 60, resolutionY-60, color.White)
 
 		// Drawing background
@@ -319,6 +326,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Translate(float64(g.city_background.X), float64(g.city_background.Y))
 		screen.DrawImage(img_city, op)
 
+		// Drawing score value
 		text.Draw(screen, fmt.Sprintf("Score %d", g.score), game_font_big, resolutionX/4*3, resolutionY/7, color.White)
 
 		// Drawing player hit-box
@@ -351,7 +359,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		}
 
 	} else if g.game_status == ModeGameOV {
-		// Drawing game over image
+		// Drawing "game over" image
 		op := &ebiten.DrawImageOptions{}
 		op.GeoM.Translate(-float64(frameWidth_over/2), -float64(frameHeight_over))
 		op.GeoM.Translate(float64(resolutionX/2), float64(resolutionY/3))
@@ -367,6 +375,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			text.Draw(screen, fmt.Sprintf("Press SPACE to continue"), game_font_big, resolutionX/4, resolutionY/2+100, color.White)
 		}
 	}
+
 	ebitenutil.DrawRect(screen, float64(0), float64(0), float64(resolutionX), 30, color.RGBA{0x00, 0x00, 0x00, 0xff}) //Top Black
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("FPS: %0.2f", ebiten.CurrentFPS()), 30, 5)
 
