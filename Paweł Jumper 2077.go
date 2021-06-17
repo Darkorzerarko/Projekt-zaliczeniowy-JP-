@@ -1,3 +1,12 @@
+// Imię i nazwisko: Dariusz Rzeźnik
+// Grupa: 3
+// Nazwa: Prosta gra zręcznościowa
+// Tytuł: Paweł Jumper 2077
+
+// Sensem gry jest osiągnięcie najlepszego wyniku (wyrażonego w sekudach) w grze,
+// przeciwko osiągniecia tego będą nam uprzykrzać grę potworki,
+// aby je ominąć wystarczy je przeskoczyć (spacja)
+
 package main
 
 import (
